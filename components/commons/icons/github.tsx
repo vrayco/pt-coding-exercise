@@ -1,7 +1,7 @@
 import * as React from "react";
 import { SVGProps } from "react";
 
-const Github = (props: SVGProps<SVGSVGElement>) => (
+const Github = (props: SVGProps<SVGSVGElement>): JSX.Element => (
   <svg
     aria-hidden="true"
     viewBox="0 0 16 16"
