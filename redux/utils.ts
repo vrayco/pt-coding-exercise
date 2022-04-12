@@ -1,9 +1,9 @@
 import { AnyAction, Action } from "@reduxjs/toolkit";
-import { RootSate } from "./store";
+import { RootState } from "./store";
 
 interface HydrateAction extends Action {
   payload: {
-    preloadedState: Partial<RootSate>;
+    preloadedState: Partial<RootState>;
   };
 }
 

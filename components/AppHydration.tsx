@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { hydrate } from "redux/appSlice";
 import { AppHydrationStatus } from "enums";
-import { RootSate } from "redux/store";
+import { RootState } from "redux/store";
 
 type Props = {
   children: JSX.Element;
-  preloadedState: Partial<RootSate>;
+  preloadedState: Partial<RootState>;
 };
 
 const AppHydration = ({ preloadedState, children }: Props): JSX.Element => {
