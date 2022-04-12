@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { SignJWT } from "jose";
 import Cookies from "cookies";
 import { nanoid } from "nanoid";
-import { USER_TOKEN, JWT_SECRET_KEY } from "constants/auth"; // TODO: env vars
+import { USER_TOKEN_COOKIE, JWT_SECRET_KEY } from "constants/auth"; // TODO: env vars
 import { Credentials, SiginApiResponse } from "types";
 import authService from "services/authService";
 import usersService from "services/usersService";
@@ -41,7 +41,7 @@ export default async (
     .sign(new TextEncoder().encode(JWT_SECRET_KEY));
 
   const cookies = new Cookies(req, res);
-  cookies.set(USER_TOKEN, token, {
+  cookies.set(USER_TOKEN_COOKIE, token, {
     httpOnly: true,
   });
 

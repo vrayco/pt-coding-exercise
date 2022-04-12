@@ -9,10 +9,10 @@ import Input, { Types } from "./commons/input";
 const SignInForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { fetching, error } = useAppSelector((state) => state.auth); // TODO custom selectors instead of this?
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const debouncedEmail = useDebounce(email, 700);
-  const [validEmail, setValidEmail] = useState<boolean | undefined>();
+  const [validEmail, setValidEmail] = useState<boolean | undefined>(undefined);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
