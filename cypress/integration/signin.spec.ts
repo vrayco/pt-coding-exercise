@@ -4,7 +4,6 @@ describe("Sigin", () => {
   it("should navigate to the sign in page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
-    cy.wait(10);
 
     // The signin page should contain an h1 with "Sign in"
     cy.get("h1").contains("Sign in");
@@ -13,7 +12,6 @@ describe("Sigin", () => {
   it("should navigate to Dashboard if signin with correct credentials", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
-    cy.wait(10);
 
     // The signin page should contain an h1 with "Sign in"
     cy.get("h1").contains("Sign in");
@@ -37,7 +35,6 @@ describe("Sigin", () => {
   it("should show an error when signin with wrong credentials", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
-    cy.wait(10);
 
     // The signin page should contain an h1 with "Sign in"
     cy.get("h1").contains("Sign in");
@@ -59,7 +56,6 @@ describe("Sigin", () => {
 
   it("should show an error when email is not a valid email", () => {
     cy.visit("http://localhost:3000/");
-    cy.wait(10);
 
     // The signin page should contain an h1 with "Sign in"
     cy.get("h1").contains("Sign in");
@@ -72,7 +68,6 @@ describe("Sigin", () => {
   it("should navigate to / after logout", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
-    cy.wait(10);
 
     // The signin page should contain an h1 with "Sign in"
     cy.get("h1").contains("Sign in");
