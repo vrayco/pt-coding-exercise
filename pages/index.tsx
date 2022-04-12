@@ -4,8 +4,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useAppSelector } from "redux/hooks";
 
-import Github from "../components/commons/icons/github";
-import SignInForm from "../components/signin-form";
+import Github from "../components/commons/icons/Github";
+import SignInForm from "../components/SigninForm";
 import { AppHydrationStatus } from "enums";
 
 const Home: NextPage = () => {

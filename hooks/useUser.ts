@@ -1,5 +1,5 @@
 import { useAppSelector } from "redux/hooks";
-import { signOut } from "redux/auth-slice";
+import { signOut } from "redux/authSlice";
 import { useAppDispatch } from "redux/hooks";
 
 // TODO

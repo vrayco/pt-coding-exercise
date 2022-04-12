@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import Layout from "components/layout";
+import Layout from "components/Layout";
 import { NON_SENSITIVE_INFO_USER_COOKIE } from "constants/auth";
 import { NonSensitiveInfoUser } from "types";
 import usersService from "services/usersService";

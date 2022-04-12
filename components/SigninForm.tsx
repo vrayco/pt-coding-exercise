@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
-import Button from "components/commons/button";
-import { signIn } from "redux/auth-slice";
+import Button from "components/commons/Button";
+import { signIn } from "redux/authSlice";
 import findByCredentials from "services/usersService";
 import useDebounce from "hooks/useDebounce";
-import Input, { Types } from "./commons/input";
+import Input, { Types } from "./commons/Input";
 
 const SignInForm = (): JSX.Element => {
   const dispatch = useAppDispatch();

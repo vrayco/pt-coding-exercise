@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
-import { hydrate } from "redux/app-slice";
+import { hydrate } from "redux/appSlice";
 import { AppHydrationStatus } from "enums";
 import { RootSate } from "redux/store";
 
