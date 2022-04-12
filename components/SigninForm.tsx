@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
-import Button from "components/commons/button";
-import { signIn } from "redux/auth-slice";
+import Button from "components/commons/Button";
+import { signIn } from "redux/authSlice";
 import findByCredentials from "services/usersService";
 import useDebounce from "hooks/useDebounce";
-import Input, { Types } from "./commons/input";
+import Input, { Types } from "./commons/Input";
 
 const SignInForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { fetching, error } = useAppSelector((state) => state.auth); // TODO custom selectors instead of this?
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const debouncedEmail = useDebounce(email, 700);
-  const [validEmail, setValidEmail] = useState<boolean | undefined>();
+  const [validEmail, setValidEmail] = useState<boolean | undefined>(undefined);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();

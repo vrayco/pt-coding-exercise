@@ -1,4 +1,6 @@
+import { JWTVerifyResult } from "jose";
 import { Credentials, NonSensitiveInfoUser, SiginApiResponse } from "types";
+import usersService from "./usersService";
 
 const parseEmail = (emailFromRequest: any): string => {
   if (!isString(emailFromRequest)) {
@@ -49,4 +51,12 @@ const signIn = async (
   }
 };
 
-export default { toCredentials, signIn };
+const getNonSensitiveInfoUserFromToken = (
+  data: JWTVerifyResult
+): NonSensitiveInfoUser | undefined => {
+  return usersService.isNonSenstiveUser(data.payload.user)
+    ? data.payload.user
+    : undefined;
+};
+
+export default { toCredentials, signIn, getNonSensitiveInfoUserFromToken };

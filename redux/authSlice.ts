@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+
 import authService from "services/authService";
 import { Credentials, NonSensitiveInfoUser } from "types";
+import { isHydrateAction } from "./utils";
 
 interface AuthState {
   user: NonSensitiveInfoUser | undefined;
@@ -36,6 +38,9 @@ export const authSlice = createSlice({
       state.user = undefined;
       state.error = action.payload;
       state.fetching = false;
+    });
+    builder.addMatcher(isHydrateAction, (state, action) => {
+      state.user = action.payload.preloadedState?.auth?.user;
     });
   },
 });

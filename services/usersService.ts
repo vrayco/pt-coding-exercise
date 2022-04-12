@@ -28,4 +28,34 @@ const validateEmail = (email: string): boolean => {
   return matches !== null;
 };
 
-export default { findByCredentials, validateEmail };
+const isNonSenstiveUser = (value: any): value is NonSensitiveInfoUser => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    "firstName" in value &&
+    "middleName" in value &&
+    "lastName" in value
+  );
+};
+
+const getNonSensitiveInfoUserFromCookie = (
+  cookie: string
+): NonSensitiveInfoUser | undefined => {
+  try {
+    const nonSensitiveInfoUser = JSON.parse(cookie);
+
+    return isNonSenstiveUser(nonSensitiveInfoUser)
+      ? nonSensitiveInfoUser
+      : undefined;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export default {
+  findByCredentials,
+  validateEmail,
+  isNonSenstiveUser,
+  getNonSensitiveInfoUserFromCookie,
+};

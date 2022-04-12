@@ -45,7 +45,6 @@ describe("Sigin", () => {
 
     cy.get("button").contains("Sign in").click();
 
-    // we should be redirected to /dashboard
     cy.url().should("include", "/");
 
     // our auth cookie should be present
@@ -64,5 +63,25 @@ describe("Sigin", () => {
     cy.get("input[name=email]").type("This is not an email");
 
     cy.get("p").should("contain", "Email not valid");
+  });
+
+  it("should navigate to / after logout", () => {
+    // Start from the index page
+    cy.visit("http://localhost:3000/");
+
+    // The signin page should contain an h1 with "Sign in"
+    cy.get("h1").contains("Sign in");
+
+    cy.get("input[name=email]").type(users[0].email);
+
+    cy.get("input[name=password]").type(`${users[0].password}`);
+
+    cy.get("button").contains("Sign in").click();
+
+    cy.get("button").contains("Sign in").should("not.exist");
+
+    cy.get("a").contains("Logout").click();
+
+    cy.get("button").contains("Sign in").should("exist");
   });
 });
