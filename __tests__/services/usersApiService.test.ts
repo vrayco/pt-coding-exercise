@@ -1,9 +1,9 @@
 import { expect } from "@jest/globals";
 import { Credentials, SensitiveInfoUser, User } from "types";
 import usersApiService from "services/usersApiService";
-import jsonUsers from "mockDatabase/dummyUsers.json";
+import { usersRepository } from "mockDatabase/usersRepository";
 
-const users = jsonUsers as SensitiveInfoUser[];
+const users = usersRepository.getDummyUsers();
 
 describe("users service", () => {
   describe("findByCredentials method", () => {

@@ -1,9 +1,9 @@
 import { expect } from "@jest/globals";
 import { Credentials, SensitiveInfoUser, User } from "types";
 import usersService from "services/usersService";
-import jsonUsers from "cypress/fixtures/users.json";
+import { usersRepository } from "mockDatabase/usersRepository";
 
-const users = jsonUsers as User[];
+const users = usersRepository.getDummyUsers();
 
 describe("users service", () => {
   describe("validateEmail method", () => {

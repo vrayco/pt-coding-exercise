@@ -11,10 +11,6 @@ jobs:
     environment: CI
     runs-on: ubuntu-latest
     steps:
-      - name: condition 1
-        if: runner.os != 'Windows'
-        run: echo "The operating system on the runner is $env:JWT_SECRET_KEY."
-
       - name: Checkout
         uses: actions/checkout@v2
 
