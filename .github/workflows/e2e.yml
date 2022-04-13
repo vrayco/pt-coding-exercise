@@ -18,8 +18,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
-          # NEXT_PUBLIC_FIREBASE_CONFIG: ${{ secrets.NEXT_PUBLIC_FIREBASE_CONFIG }}
-          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+          JWT_SECRET_KEY: ${{ CI.JWT_SECRET_KEY }}
+          NEXT_PUBLIC_CLIENT_ID_GITHUB: ${{ CI.NEXT_PUBLIC_CLIENT_ID_GITHUB }}
+          CLIENT_SECRET_GITHUB: ${{ CI.CLIENT_SECRET_GITHUB }}
         with:
           build: yarn build
           start: yarn start

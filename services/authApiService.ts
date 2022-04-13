@@ -3,8 +3,8 @@ import { Credentials, NewUser, SensitiveInfoUser, User } from "types";
 import usersService from "./usersService";
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
-const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID_GITHUB;
+const GITHUB_CLIENT_SECRET = process.env.CLIENT_SECRET_GITHUB;
 
 const parseEmail = (emailFromRequest: any): string => {
   if (!isString(emailFromRequest)) {

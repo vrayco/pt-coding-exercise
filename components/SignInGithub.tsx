@@ -7,6 +7,8 @@ import Button, { BaseColors } from "./commons/Button";
 import { useRouter } from "next/router";
 import { SigninProviders } from "enums";
 
+const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID_GITHUB;
+
 type Props = {
   code: string | undefined;
 };
@@ -31,7 +33,7 @@ const SignInGithub = ({ code }: Props): JSX.Element => {
     if (!disabled) {
       setClicked(true);
       router.replace(
-        `https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${location}`
+        `https://github.com/login/oauth/authorize?scope=user&client_id=${GITHUB_CLIENT_ID}&redirect_uri=${location}`
       );
     }
   };
