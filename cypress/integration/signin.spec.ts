@@ -1,4 +1,6 @@
-import users from "cypress/fixtures/users.json";
+import { usersRepository } from "mockDatabase/usersRepository";
+
+const users = usersRepository.getDummyUsers();
 
 describe("Sigin", () => {
   it("should navigate to the sign in page", () => {

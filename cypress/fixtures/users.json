@@ -2,25 +2,19 @@
   {
     "id": 1,
     "email": "juan@playtomic.dev",
-    "firstName": "Juan",
-    "middleName": "Lebrón",
-    "lastName": " Chincoa",
+    "name": "Juan Lebrón Chincoa",
     "password": "pass"
   },
   {
     "id": 3,
     "email": "alejandra@playtomic.dev",
-    "firstName": "Alejandra",
-    "middleName": "Salazar",
-    "lastName": " Bengoechea",
+    "name": "Alejandra Salazar Bengoechea",
     "password": "pass"
   },
   {
     "id": 2,
     "email": "vrayco@gmail.com",
-    "firstName": "Rayco",
-    "middleName": "Velázquez",
-    "lastName": " González",
+    "name": "Rayco Velázquez González",
     "password": "pass"
   }
 ]

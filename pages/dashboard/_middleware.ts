@@ -1,28 +1,16 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { jwtVerify, generateSecret } from "jose";
-import {
-  USER_TOKEN_COOKIE,
-  NON_SENSITIVE_INFO_USER_COOKIE,
-  JWT_SECRET_KEY,
-} from "constants/auth";
-import authService from "services/authService";
+import { USER_TOKEN_COOKIE, USER_COOKIE } from "constants/auth";
+import authApiService from "services/authApiService";
+
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   try {
+    // TODO: What if token is expired, is it working?
     const token = req.cookies[USER_TOKEN_COOKIE];
-    const secret = await generateSecret("HS256");
-    const data = await jwtVerify(
-      token,
-      new TextEncoder().encode(JWT_SECRET_KEY)
-    );
-
-    const nonSensitiveInfoUser =
-      authService.getNonSensitiveInfoUserFromToken(data);
-    if (nonSensitiveInfoUser) {
-      return NextResponse.next().cookie(
-        NON_SENSITIVE_INFO_USER_COOKIE,
-        JSON.stringify(nonSensitiveInfoUser)
-      );
+    const user = await authApiService.getUserFromJWTToken(token);
+    if (user) {
+      return NextResponse.next().cookie(USER_COOKIE, JSON.stringify(user));
     }
   } catch (err) {
     return NextResponse.redirect(new URL("/", req.url));

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
-import Button from "components/commons/Button";
-import { signIn } from "redux/authSlice";
-import findByCredentials from "services/usersService";
+import Button, { BaseColors } from "components/commons/Button";
+import { signInCredentials } from "redux/authSlice";
+import usersService from "services/usersService";
 import useDebounce from "hooks/useDebounce";
 import Input, { Types } from "./commons/Input";
 
@@ -12,25 +12,30 @@ const SignInForm = (): JSX.Element => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const debouncedEmail = useDebounce(email, 700);
-  const [validEmail, setValidEmail] = useState<boolean | undefined>(undefined);
+  const [isValidEmail, setIsValidEmail] = useState<boolean | undefined>(
+    undefined
+  );
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    dispatch(signIn({ email, password }));
+    dispatch(signInCredentials({ email, password }));
   };
 
   useEffect(() => {
-    if (debouncedEmail && debouncedEmail.length > 0) {
-      setValidEmail(findByCredentials.validateEmail(debouncedEmail));
+    if (debouncedEmail) {
+      setIsValidEmail(usersService.validateEmail(debouncedEmail));
     }
   }, [debouncedEmail]);
 
   useEffect(() => {
-    setValidEmail(undefined);
+    setIsValidEmail(undefined);
   }, [email]);
 
-  const submitButtonEnable: boolean =
-    !fetching && email.length > 0 && password.length > 0 && validEmail === true;
+  const disabled =
+    fetching !== undefined ||
+    email.length === 0 ||
+    password.length === 0 ||
+    isValidEmail !== true;
 
   return (
     <>
@@ -45,7 +50,7 @@ const SignInForm = (): JSX.Element => {
           label="Email"
           value={email}
           onHandleChange={setEmail}
-          error={validEmail === false ? "Email not valid" : undefined}
+          error={isValidEmail === false ? "Email not valid" : undefined}
           autoFocus
           required
           autoComplete="off"
@@ -63,10 +68,12 @@ const SignInForm = (): JSX.Element => {
 
         <div>
           <Button
-            label={"Sign in"}
             onClick={handleSubmit}
-            disabled={!submitButtonEnable}
-          />
+            disabled={disabled}
+            baseColor={BaseColors.GREEN}
+          >
+            Sign in
+          </Button>
         </div>
       </form>
     </>

@@ -3,6 +3,9 @@ import { HomeIcon, UsersIcon, LogoutIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import useUser from "hooks/useUser";
 import useRequireAuth from "hooks/useRequireAuth";
+import { useAppDispatch } from "redux/hooks";
+import { useAppSelector } from "redux/hooks";
+import { signOut } from "redux/authSlice";
 
 type Props = {
   children: JSX.Element;
@@ -10,7 +13,8 @@ type Props = {
 
 const Layout = ({ children }: Props): JSX.Element => {
   const router = useRouter();
-  const user = useUser();
+  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useAppDispatch();
   useRequireAuth();
 
   const navigation = [
@@ -24,12 +28,13 @@ const Layout = ({ children }: Props): JSX.Element => {
       pathname: "/dashboard/settings",
       icon: UsersIcon,
     },
-    {
-      name: "Logout",
-      pathname: "/dashboard/logout",
-      icon: LogoutIcon,
-    },
   ];
+
+  const onHandleLogout = () => {
+    if (user) {
+      dispatch(signOut());
+    }
+  };
 
   const isCurrentPathname = (pathname: string): boolean =>
     router.pathname === pathname;
@@ -70,6 +75,16 @@ const Layout = ({ children }: Props): JSX.Element => {
                     </a>
                   </Link>
                 ))}
+                <a
+                  onClick={onHandleLogout}
+                  className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  <LogoutIcon
+                    className="mr-3 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Logout
+                </a>
               </nav>
             </div>
             <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
@@ -77,7 +92,7 @@ const Layout = ({ children }: Props): JSX.Element => {
                 <div className="flex items-center">
                   <div className="ml-3">
                     <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                      {user.fullname}
+                      {user?.name}
                     </p>
                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
                       View profile
