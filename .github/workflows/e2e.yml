@@ -18,9 +18,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
-          JWT_SECRET_KEY: ${{ CI.JWT_SECRET_KEY }}
-          NEXT_PUBLIC_CLIENT_ID_GITHUB: ${{ CI.NEXT_PUBLIC_CLIENT_ID_GITHUB }}
-          CLIENT_SECRET_GITHUB: ${{ CI.CLIENT_SECRET_GITHUB }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          NEXT_PUBLIC_CLIENT_ID_GITHUB: ${{ secrets.NEXT_PUBLIC_CLIENT_ID_GITHUB }}
+          CLIENT_SECRET_GITHUB: ${{ secrets.CLIENT_SECRET_GITHUB }}
         with:
           build: yarn build
           start: yarn start
