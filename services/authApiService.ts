@@ -129,7 +129,7 @@ const revokeGitHubToken = async (
   }
 };
 
-// TODO comment
+// TODO comment. If token no valid it fails
 const getUserFromJWTToken = async (
   token: string
 ): Promise<User | undefined> => {
@@ -143,7 +143,7 @@ const getUserFromJWTToken = async (
       ? data.payload.user
       : undefined;
   } catch (e) {
-    console.error(e);
+    console.log(e);
   }
 };
 

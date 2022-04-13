@@ -17,11 +17,9 @@ const DUMMY_USERS = [
   },
 ];
 
-const loadDataFromDisk = () => {
-  fs.readFile(DATABASE_PATH, "utf-8", (err: any, data: any) => {
-    if (err) throw err;
-    users = JSON.parse(data);
-  });
+const loadDataFromDisk = async () => {
+  const data = fs.readFileSync(DATABASE_PATH, "utf-8");
+  users = JSON.parse(data);
 };
 
 // users in JSON file for simplicity, store in a db for production applications

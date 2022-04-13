@@ -1,10 +1,8 @@
 import { useRouter } from "next/router";
 import { HomeIcon, UsersIcon, LogoutIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-import useUser from "hooks/useUser";
 import useRequireAuth from "hooks/useRequireAuth";
-import { useAppDispatch } from "redux/hooks";
-import { useAppSelector } from "redux/hooks";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { signOut } from "redux/authSlice";
 
 type Props = {
