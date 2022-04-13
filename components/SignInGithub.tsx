@@ -16,15 +16,15 @@ type Props = {
 const SignInGithub = ({ code }: Props): JSX.Element => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const fetching = useAppSelector((state) => state.auth.fetching); // TODO custom selectors instead of this?
+  const { fetching, error } = useAppSelector((state) => state.auth); // TODO custom selectors instead of this?
   const [clicked, setClicked] = useState<boolean>(false);
   const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
-    if (code && !fetching && !user) {
+    if (code && !fetching && !user && !error) {
       dispatch(signInGithub(code));
     }
-  }, [code, dispatch, fetching, user]);
+  }, [code, dispatch, fetching, user, error]);
 
   const disabled = fetching !== undefined || clicked;
   const showSpinner = fetching === SigninProviders.GITHUB || clicked;
