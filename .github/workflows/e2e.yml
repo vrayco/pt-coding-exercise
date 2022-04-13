@@ -8,6 +8,7 @@ on:
 
 jobs:
   cypress-run:
+    environment: CI
     runs-on: ubuntu-latest
     steps:
       - name: condition 1
@@ -22,9 +23,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
-          JWT_SECRET_KEY: MY_SECRET_PASSWORD
-          NEXT_PUBLIC_CLIENT_ID_GITHUB: UNKNOWN
-          CLIENT_SECRET_GITHUB: UNKNOWN
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          NEXT_PUBLIC_CLIENT_ID_GITHUB: ${{ secrets.NEXT_PUBLIC_CLIENT_ID_GITHUB }}
+          CLIENT_SECRET_GITHUB: ${{ secrets.CLIENT_SECRET_GITHUB }}
         with:
           build: yarn build
           start: yarn start
