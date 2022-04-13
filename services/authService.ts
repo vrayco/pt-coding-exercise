@@ -1,45 +1,8 @@
-import { JWTVerifyResult } from "jose";
-import { Credentials, NonSensitiveInfoUser, SiginApiResponse } from "types";
-import usersService from "./usersService";
+import { ApiResponse, Credentials, User } from "types";
 
-const parseEmail = (emailFromRequest: any): string => {
-  if (!isString(emailFromRequest)) {
-    throw new Error("Incorrent or missing email");
-  }
-
-  return emailFromRequest;
-};
-
-const parsePassword = (passwordFromRequest: any): string => {
-  if (!isString(passwordFromRequest)) {
-    throw new Error("Incorrent or missing password");
-  }
-
-  return passwordFromRequest;
-};
-
-const isString = (string: string): boolean => {
-  return typeof string === "string";
-};
-
-const toCredentials = (object: any): Credentials => {
-  const credentials: Credentials = {
-    email: parseEmail(object.email),
-    password: parsePassword(object.password),
-  };
-
-  return credentials;
-};
-
-const signIn = async (
-  credentials: Credentials
-): Promise<NonSensitiveInfoUser> => {
-  const response = await fetch("/api/auth/signin", {
-    method: "POST",
-    body: JSON.stringify(credentials),
-  });
-
-  const { data, errors }: SiginApiResponse = await response.json();
+// TODO: Maybe move to a common place and give a better name
+const parseAndBuildResponse = async <T>(response: Response): Promise<T> => {
+  const { data, errors }: ApiResponse<T> = await response.json();
 
   if (response.ok && data) {
     return Promise.resolve(data);
@@ -51,12 +14,34 @@ const signIn = async (
   }
 };
 
-const getNonSensitiveInfoUserFromToken = (
-  data: JWTVerifyResult
-): NonSensitiveInfoUser | undefined => {
-  return usersService.isNonSenstiveUser(data.payload.user)
-    ? data.payload.user
-    : undefined;
+const signInCredentials = async (credentials: Credentials): Promise<User> => {
+  const response = await fetch("/api/auth/signin", {
+    method: "POST",
+    body: JSON.stringify(credentials),
+  });
+
+  return await parseAndBuildResponse<User>(response);
 };
 
-export default { toCredentials, signIn, getNonSensitiveInfoUserFromToken };
+const signInGithub = async (code: string): Promise<User> => {
+  const response = await fetch("/api/auth/signin/github", {
+    method: "POST",
+    body: JSON.stringify({
+      code,
+    }),
+  });
+
+  return await parseAndBuildResponse<User>(response);
+};
+
+const signOut = async (): Promise<Boolean> => {
+  const response = await fetch("/api/auth/signout", { method: "POST" });
+
+  return response.ok;
+};
+
+export default {
+  signInCredentials,
+  signInGithub,
+  signOut,
+};

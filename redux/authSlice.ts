@@ -1,18 +1,18 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
-
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { SigninProviders } from "enums";
 import authService from "services/authService";
-import { Credentials, NonSensitiveInfoUser } from "types";
+import { Credentials, User } from "types";
 import { isHydrateAction } from "./utils";
 
 interface AuthState {
-  user: NonSensitiveInfoUser | undefined;
-  fetching: boolean;
+  user: User | undefined;
+  fetching: SigninProviders | undefined;
   error: string | undefined;
 }
 
 const initialState: AuthState = {
   user: undefined,
-  fetching: false,
+  fetching: undefined,
   error: undefined,
 };
 
@@ -20,24 +20,36 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    fetching: (state) => {
-      state.fetching = true;
+    fetching: (state, action: PayloadAction<SigninProviders>) => {
+      state.fetching = action.payload;
       state.error = undefined;
-    },
-    signOut: (state) => {
-      state.user = undefined;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signIn.fulfilled, (state, action) => {
+    builder.addCase(signInCredentials.fulfilled, (state, action) => {
       state.user = action.payload;
-      state.fetching = false;
+      state.fetching = undefined;
       state.error = undefined;
     });
-    builder.addCase(signIn.rejected, (state, action) => {
+    builder.addCase(signInCredentials.rejected, (state, action) => {
       state.user = undefined;
+      state.fetching = undefined;
       state.error = action.payload;
-      state.fetching = false;
+    });
+    builder.addCase(signInGithub.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.fetching = undefined;
+      state.error = undefined;
+    });
+    builder.addCase(signInGithub.rejected, (state, action) => {
+      state.user = undefined;
+      state.fetching = undefined;
+      state.error = action.payload;
+    });
+    builder.addCase(signOut.fulfilled, (state) => {
+      state.user = undefined;
+      state.fetching = undefined;
+      state.error = undefined;
     });
     builder.addMatcher(isHydrateAction, (state, action) => {
       state.user = action.payload.preloadedState?.auth?.user;
@@ -45,21 +57,37 @@ export const authSlice = createSlice({
   },
 });
 
-const { fetching, signOut } = authSlice.actions;
+const { fetching } = authSlice.actions;
 
-const signIn = createAsyncThunk<
-  NonSensitiveInfoUser,
+const signInCredentials = createAsyncThunk<
+  User,
   Credentials,
   { rejectValue: string }
->("auth/signin", async (credentials: Credentials, thunkAPI) => {
-  thunkAPI.dispatch(fetching());
+>("auth/signin_credentials", async (credentials: Credentials, thunkAPI) => {
+  thunkAPI.dispatch(fetching(SigninProviders.CREDENTIALS));
   try {
-    return await authService.signIn(credentials);
+    return await authService.signInCredentials(credentials);
   } catch (e: any) {
     return thunkAPI.rejectWithValue(e.message);
   }
 });
 
-export { signIn, signOut };
+const signInGithub = createAsyncThunk<User, string, { rejectValue: string }>(
+  "auth/signin_github",
+  async (code: string, thunkAPI) => {
+    thunkAPI.dispatch(fetching(SigninProviders.GITHUB));
+    try {
+      return await authService.signInGithub(code);
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+const signOut = createAsyncThunk<Boolean>("auth/signout", async () => {
+  return await authService.signOut();
+});
+
+export { signInCredentials, signInGithub, signOut };
 
 export default authSlice.reducer;

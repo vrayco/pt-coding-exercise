@@ -9,9 +9,7 @@ function useUser() {
 
   return {
     user,
-    fullname: user
-      ? `${user.firstName} ${user.middleName} ${user.lastName}`
-      : "",
+    fullname: user ? user.name : "",
     logout: () => dispatch(signOut()),
   };
 }

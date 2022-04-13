@@ -1,20 +1,23 @@
-export interface Credentials {
-  email: string;
-  password: string;
-}
-
-export interface User extends Credentials {
+export interface User {
   id: number;
-  firstName: string;
-  middleName: string;
-  lastName: string;
+  email: string;
+  name: string;
+  avatar_url?: string;
 }
 
-export type NonSensitiveInfoUser = Omit<User, "password">;
+export interface SensitiveInfoUser extends User {
+  password: string;
+  githubToken?: string;
+}
 
+type Credentials = Pick<SensitiveInfoUser, "email" | "password">;
+
+type NewUser = Omit<User, "id"> & Partial<SensitiveInfoUser>;
+
+const a: NewUser = {};
 interface ApiResponse<T, E = { message: string }> {
   data?: T;
   errors?: E[];
 }
 
-export type SiginApiResponse = ApiResponse<NonSensitiveInfoUser>;
+export type SiginApiResponse = ApiResponse<User>;

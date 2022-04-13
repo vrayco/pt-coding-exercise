@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { SignJWT } from "jose";
-import Cookies from "cookies";
-import { nanoid } from "nanoid";
-import { USER_TOKEN_COOKIE, JWT_SECRET_KEY } from "constants/auth"; // TODO: env vars
 import { Credentials, SiginApiResponse } from "types";
-import authService from "services/authService";
-import usersService from "services/usersService";
+import authApiService from "services/authApiService";
+import usersApiService from "services/usersApiService";
+import { SignJWT } from "jose";
+import { nanoid } from "nanoid";
+import { USER_TOKEN_COOKIE } from "constants/auth";
+import Cookies from "cookies";
 
-export const ERROR_MESSAGE_BAD_REQUEST = "BAD REQUEST";
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 export default async (
   req: NextApiRequest,
@@ -20,19 +20,19 @@ export default async (
 
   let credentials: Credentials;
   try {
-    credentials = authService.toCredentials(JSON.parse(req.body));
+    credentials = authApiService.toCredentials(JSON.parse(req.body));
   } catch (e) {
     res.status(400).end();
     return;
   }
 
-  const user = usersService.findByCredentials(credentials);
-
+  const user = usersApiService.findUserByCredentials(credentials);
   if (!user) {
     res.status(400).json({ errors: [{ message: "Wrong credentials" }] });
     return;
   }
 
+  // Create JWT token
   const token = await new SignJWT({ user })
     .setProtectedHeader({ alg: "HS256" })
     .setJti(nanoid())
@@ -40,18 +40,11 @@ export default async (
     .setExpirationTime("1h")
     .sign(new TextEncoder().encode(JWT_SECRET_KEY));
 
+  // Set JWT token in HTTP only cookie
   const cookies = new Cookies(req, res);
   cookies.set(USER_TOKEN_COOKIE, token, {
     httpOnly: true,
   });
 
-  res.status(200).json({
-    data: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      middleName: user.middleName,
-      lastName: user.lastName,
-    },
-  });
+  res.status(200).json({ data: user });
 };
