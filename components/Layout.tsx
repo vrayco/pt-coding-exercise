@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { signOut } from "redux/authSlice";
 
 type Props = {
-  children: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
 };
 
 const Layout = ({ children }: Props): JSX.Element => {
@@ -148,7 +148,7 @@ const Layout = ({ children }: Props): JSX.Element => {
                       <div>
                         <Image
                           className=" h-8 w-8 rounded-full"
-                          src={user?.avatar_url ?? "/default_avatar.png"}
+                          src={user?.avatarUrl ?? "/default_avatar.png"}
                           alt={user?.name}
                           height={32}
                           width={32}
@@ -219,7 +219,7 @@ const Layout = ({ children }: Props): JSX.Element => {
                 <div>
                   <Image
                     className="inline-block h-9 w-9 rounded-full"
-                    src={user?.avatar_url ?? "/default_avatar.png"}
+                    src={user?.avatarUrl ?? "/default_avatar.png"}
                     alt={user?.name}
                     height={32}
                     width={32}

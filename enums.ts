@@ -1,10 +1,16 @@
+export enum AppGlobalStatus {
+  READY = "READY",
+  RESETTING = "RESETTING",
+  RESETED = "RESETED",
+}
+
 export enum AppHydrationStatus {
-  PENDING = "pending",
-  IN_PROGRESS = "in_progress",
-  HYDRATED = "hydrated",
+  PENDING = "PENDING",
+  IN_PROGRESS = "IN_PROGRESS",
+  HYDRATED = "HYDRATED",
 }
 
 export enum SigninProviders {
-  CREDENTIALS = "credentials",
-  GITHUB = "github",
+  CREDENTIALS = "CREDENTIALS",
+  GITHUB = "GITHUB",
 }

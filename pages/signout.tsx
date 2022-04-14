@@ -1,5 +1,5 @@
-import type { NextPage } from "next";
 import { useEffect } from "react";
+import type { NextPage } from "next";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { signOut } from "redux/authSlice";
 import { useRouter } from "next/router";

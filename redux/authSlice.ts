@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { SigninProviders } from "enums";
 import authService from "services/authService";
 import { Credentials, User } from "types";
-import { isHydrateAction } from "./utils";
+import { reset } from "./appSlice";
+import { isHydrateAction, isResetAction } from "./utils";
 
 interface AuthState {
   user: User | undefined;
@@ -54,6 +55,9 @@ export const authSlice = createSlice({
     builder.addMatcher(isHydrateAction, (state, action) => {
       state.user = action.payload.preloadedState?.auth?.user;
     });
+    builder.addMatcher(isResetAction, (state, action) => {
+      return initialState;
+    });
   },
 });
 
@@ -84,9 +88,13 @@ const signInGithub = createAsyncThunk<User, string, { rejectValue: string }>(
   }
 );
 
-const signOut = createAsyncThunk<Boolean>("auth/signout", async () => {
-  return await authService.signOut();
-});
+const signOut = createAsyncThunk<Boolean>(
+  "auth/signout",
+  async (_, thunkAPI) => {
+    thunkAPI.dispatch(reset()); // This action will be handled by others reducers to get reset the whole state.
+    return await authService.signOut();
+  }
+);
 
 export { signInCredentials, signInGithub, signOut };
 

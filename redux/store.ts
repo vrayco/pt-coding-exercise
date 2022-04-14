@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "redux/authSlice";
+import dataSlice from "redux/dataSlice";
 import appSlice from "redux/appSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
+    data: dataSlice,
     app: appSlice, // This reducer must be in the last place to ensure hydrate action is executed the last one
   },
 });
