@@ -1,11 +1,10 @@
 import { useEffect } from "react";
-import { useAppSelector } from "redux/hooks";
 import { useRouter } from "next/router";
+import { useAppSelector } from "redux/hooks";
 
-// TODO
 function useRequireAuth(redirectUrl = "/") {
-  const user = useAppSelector((state) => state.auth.user);
   const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     if (router.pathname !== redirectUrl && user === undefined) {

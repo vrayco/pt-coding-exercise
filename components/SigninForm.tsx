@@ -12,13 +12,16 @@ const SignInForm = (): JSX.Element => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const debouncedEmail = useDebounce(email, 700);
-  const [isValidEmail, setIsValidEmail] = useState<boolean | undefined>(
-    undefined
-  );
+  const [isValidEmail, setIsValidEmail] = useState<boolean | undefined>(true);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    dispatch(signInCredentials({ email, password }));
+    const valid = usersService.validateEmail(email);
+    if (valid) {
+      dispatch(signInCredentials({ email, password }));
+    } else {
+      setIsValidEmail(false);
+    }
   };
 
   useEffect(() => {
@@ -35,7 +38,7 @@ const SignInForm = (): JSX.Element => {
     fetching !== undefined ||
     email.length === 0 ||
     password.length === 0 ||
-    isValidEmail !== true;
+    isValidEmail === false;
 
   return (
     <>

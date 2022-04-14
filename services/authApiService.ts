@@ -1,5 +1,14 @@
 import { jwtVerify } from "jose";
-import { Credentials, NewUser, SensitiveInfoUser, User } from "types";
+import { GetServerSidePropsResult } from "next";
+import {
+  Credentials,
+  GitHubRepository,
+  NewUser,
+  SensitiveInfoUser,
+  User,
+} from "types";
+import dataApiService from "./dataApiService";
+import usersApiService from "./usersApiService";
 import usersService from "./usersService";
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -51,7 +60,8 @@ const mapFromGithubDataToUser = (data: any, githubToken?: string): NewUser => {
   return {
     email: data.email,
     name: data.name,
-    avatar_url: data.avatar_url,
+    avatarUrl: data.avatar_url,
+    githubUsername: data.login,
     githubToken,
   };
 };
@@ -147,10 +157,51 @@ const getUserFromJWTToken = async (
   }
 };
 
+// TODO: comment
+const handleSessionInSSR = async (
+  token: string
+): Promise<GetServerSidePropsResult<{ [key: string]: any }>> => {
+  const user = await getUserFromJWTToken(token);
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/signout",
+        permanent: false,
+      },
+    };
+  }
+
+  const publicRepositories = await dataApiService.getPublicGithubRepositories();
+  let ownRepositories: GitHubRepository[] = [];
+  if (user.githubUsername) {
+    const githubToken = usersApiService.getGithubToken(user);
+    const { githubUsername } = user;
+    ownRepositories = await dataApiService.getOwnGithubRepositories(
+      githubUsername,
+      githubToken
+    );
+  }
+
+  return {
+    props: {
+      preloadedState: {
+        auth: {
+          user,
+        },
+        data: {
+          publicRepositories,
+          ownRepositories,
+        },
+      },
+    },
+  };
+};
+
 export default {
   toCredentials,
   toCode,
   getUserFromGithub,
   revokeGitHubToken,
   getUserFromJWTToken,
+  handleSessionInSSR,
 };

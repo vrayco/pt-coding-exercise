@@ -4,13 +4,13 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import SignInForm from "components/SigninForm";
 import SignInGithub from "components/SignInGithub";
-import useUser from "hooks/useUser";
+import { useAppSelector } from "redux/hooks";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const { query } = useRouter();
   const { code } = query;
-  const { user } = useUser();
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     if (user) {

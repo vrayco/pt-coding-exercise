@@ -2,7 +2,8 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  avatar_url?: string;
+  avatarUrl?: string;
+  githubUsername?: string;
 }
 
 export interface SensitiveInfoUser extends User {
@@ -10,14 +11,26 @@ export interface SensitiveInfoUser extends User {
   githubToken?: string;
 }
 
-type Credentials = Pick<SensitiveInfoUser, "email" | "password">;
-
 type NewUser = Omit<User, "id"> & Partial<SensitiveInfoUser>;
 
-const a: NewUser = {};
+type Credentials = Pick<SensitiveInfoUser, "email" | "password">;
+
+export interface GitHubRepository {
+  id: number;
+  name: string;
+  owner: {
+    username: string;
+    avatarUrl: string;
+    htmlUrl: string;
+  };
+  htmlUrl: string;
+  description: string;
+}
+
 interface ApiResponse<T, E = { message: string }> {
   data?: T;
   errors?: E[];
 }
 
 export type SiginApiResponse = ApiResponse<User>;
+export type GithubRepositoriesApiResponse = ApiResponse<GitHubRepository[]>;

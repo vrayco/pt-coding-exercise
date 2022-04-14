@@ -7,6 +7,12 @@ interface HydrateAction extends Action {
   };
 }
 
+type ResetAction = Action;
+
 export function isHydrateAction(action: AnyAction): action is HydrateAction {
   return action.type.endsWith("hydrate");
+}
+
+export function isResetAction(action: AnyAction): action is ResetAction {
+  return action.type.endsWith("reset");
 }
