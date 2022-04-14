@@ -82,7 +82,7 @@ describe("Sigin", () => {
 
     cy.get("button").contains("Sign in").should("not.exist");
 
-    cy.get("a").contains("Logout").click();
+    cy.get("a").contains("Sign out").click();
 
     cy.get("button").contains("Sign in").should("exist");
   });
