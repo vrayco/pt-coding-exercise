@@ -79,7 +79,7 @@ const fetchPublicRepositories = createAsyncThunk<
   GitHubRepository[],
   undefined,
   { rejectValue: string }
->("data/fetch_public_repositories", async (undefined, thunkAPI) => {
+>("data/fetch_public_repositories", async (_, thunkAPI) => {
   thunkAPI.dispatch(fetching(true));
   try {
     const response = await fetch("/api/data/github/public-repositories");

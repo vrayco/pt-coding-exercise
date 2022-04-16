@@ -47,11 +47,6 @@ export const authSlice = createSlice({
       state.fetching = undefined;
       state.error = action.payload;
     });
-    builder.addCase(signOut.fulfilled, (state) => {
-      state.user = undefined;
-      state.fetching = undefined;
-      state.error = undefined;
-    });
     builder.addMatcher(isHydrateAction, (state, action) => {
       state.user = action.payload.preloadedState?.auth?.user;
     });

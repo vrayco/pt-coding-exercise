@@ -31,8 +31,8 @@ export const appSlice = createSlice({
     builder.addMatcher(isResetAction, (state, action) => {
       return {
         ...initialState,
-        hydrated: AppHydrationStatus.HYDRATED,
         globalStatus: AppGlobalStatus.RESETED,
+        hydrated: AppHydrationStatus.HYDRATED,
       };
     });
   },

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { hydrate } from "redux/appSlice";
-import { AppGlobalStatus, AppHydrationStatus } from "enums";
+import { AppHydrationStatus } from "enums";
 import { RootState } from "redux/store";
 
 type Props = {
@@ -11,14 +11,10 @@ type Props = {
 
 const AppHydration = ({ preloadedState, children }: Props): JSX.Element => {
   const { hydrated, globalStatus } = useAppSelector((state) => state.app);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (
-      hydrated === AppHydrationStatus.PENDING &&
-      globalStatus === AppGlobalStatus.READY
-    ) {
+    if (hydrated === AppHydrationStatus.PENDING) {
       dispatch(hydrate({ preloadedState }));
     }
   }, [hydrated, globalStatus, dispatch, preloadedState]);
