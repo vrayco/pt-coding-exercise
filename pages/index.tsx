@@ -18,6 +18,10 @@ const Home: NextPage = () => {
     }
   }, [router, user]);
 
+  if (user) {
+    return <></>;
+  }
+
   return (
     <>
       <Head>

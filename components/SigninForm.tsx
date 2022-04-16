@@ -5,6 +5,8 @@ import { signInCredentials } from "redux/authSlice";
 import usersService from "services/usersService";
 import useDebounce from "hooks/useDebounce";
 import Input, { Types } from "./commons/Input";
+import Spinner from "./commons/Spinner";
+import { SigninProviders } from "enums";
 
 const SignInForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -75,7 +77,7 @@ const SignInForm = (): JSX.Element => {
             disabled={disabled}
             baseColor={BaseColors.GREEN}
           >
-            Sign in
+            {fetching === SigninProviders.CREDENTIALS ? <Spinner /> : "Sign in"}
           </Button>
         </div>
       </form>

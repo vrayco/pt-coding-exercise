@@ -69,7 +69,7 @@ const Settings: NextPage<Props> = () => {
   return (
     <>
       <Head>
-        <title>Dashboard</title>
+        <title>Settings</title>
       </Head>
       <Layout>
         {showSignInGithubAlert}
