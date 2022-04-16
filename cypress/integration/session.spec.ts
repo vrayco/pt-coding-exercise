@@ -2,7 +2,7 @@ import { usersRepository } from "mockDatabase/usersRepository";
 
 const users = usersRepository.getDummyUsers();
 
-describe("Sigin", () => {
+describe("Sig In", () => {
   it("should navigate to the sign in page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
@@ -66,7 +66,9 @@ describe("Sigin", () => {
 
     cy.get("p").should("contain", "Email not valid");
   });
+});
 
+describe("Sign out", () => {
   it("should navigate to / after logout", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
@@ -83,6 +85,30 @@ describe("Sigin", () => {
     cy.get("button").contains("Sign in").should("not.exist");
 
     cy.get("a").contains("Sign out").click();
+
+    cy.get("button").contains("Sign in").should("exist");
+  });
+});
+
+describe("Cookie", () => {
+  it("should navigate to / if the cookie does not contain a valid JWT token", () => {
+    // Start from the index page
+    cy.visit("http://localhost:3000/");
+
+    // The signin page should contain an h1 with "Sign in"
+    cy.get("h1").contains("Sign in");
+
+    cy.get("input[name=email]").type(users[0].email);
+
+    cy.get("input[name=password]").type(`${users[0].password}`);
+
+    cy.get("button").contains("Sign in").click();
+
+    cy.get("button").contains("Sign in").should("not.exist");
+
+    cy.setCookie("user-token", "invalid JWT token");
+
+    cy.reload();
 
     cy.get("button").contains("Sign in").should("exist");
   });
