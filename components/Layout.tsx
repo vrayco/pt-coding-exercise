@@ -1,6 +1,6 @@
+import { Fragment, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import {

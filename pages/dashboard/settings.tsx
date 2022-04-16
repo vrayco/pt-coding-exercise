@@ -13,6 +13,7 @@ import RepositoryGrid from "components/RepositoryGrid";
 
 interface Props {}
 
+// This constant is true when SSR (Server Side Rendering), false othewise.
 const noSSR = !!(
   typeof window !== "undefined" &&
   window.document &&
@@ -26,8 +27,9 @@ const Settings: NextPage<Props> = () => {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
 
+  // Fetch the repositories if the component is rendered by the browser (noSSR)
+  // and there is no repositories data yet.
   useEffect(() => {
-    // Only if the client is rendering (not by SSR Server Side Rendering).
     if (
       noSSR &&
       user &&
@@ -40,14 +42,14 @@ const Settings: NextPage<Props> = () => {
     }
   }, [dispatch, error, fetching, ownRepositories, user]);
 
-  const showSignInGithubAlert =
-    user === undefined || user.githubUsername === undefined ? (
+  let showSignInGithubAlert = <></>;
+  if (user === undefined || user.githubUsername === undefined) {
+    showSignInGithubAlert = (
       <Alert variant={AlertType.INFO}>
         <p>Sign in with your GitHub account is required for this section.</p>
       </Alert>
-    ) : (
-      <></>
     );
+  }
 
   const showErrorAlert = error ? (
     <Alert>
@@ -57,14 +59,14 @@ const Settings: NextPage<Props> = () => {
     <></>
   );
 
-  const showEmptyContentAlert =
-    fetching === false && ownRepositories && ownRepositories.length === 0 ? (
+  let showEmptyContentAlert = <></>;
+  if (fetching === false && ownRepositories && ownRepositories.length === 0) {
+    showEmptyContentAlert = (
       <Alert variant={AlertType.INFO}>
-        <p>Ouch! There is not available data to show</p>
+        <p>Ouch! There is not available data to show.</p>
       </Alert>
-    ) : (
-      <></>
     );
+  }
 
   return (
     <>
@@ -86,9 +88,13 @@ const Settings: NextPage<Props> = () => {
   );
 };
 
+/**
+ * Verifies the user session and returns the data the app will use to hydrate
+ * the app state.
+ */
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = context.req.cookies[USER_TOKEN_COOKIE];
-  return await authApiService.handleSessionInSSR(cookie);
+  return await authApiService.SSRVerifySessionAndHydrate(cookie);
 };
 
 export default Settings;

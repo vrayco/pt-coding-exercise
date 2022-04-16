@@ -2,10 +2,13 @@ import { usersRepository } from "mockDatabase/usersRepository";
 import { Credentials, NewUser, SensitiveInfoUser, User } from "types";
 import usersService from "services/usersService";
 
+/**
+ * Returns the User from the given SensitiveInfoUser.
+ */
 const sensitiveInfoUserToUser = (
   sensitiveInfoUser: SensitiveInfoUser
 ): User => {
-  // Extract sensitive information
+  // Extract sensitive information.
   const { githubToken, password, ...user } = sensitiveInfoUser;
 
   return user;
@@ -34,25 +37,17 @@ const findUserByCredentials = (credentials: Credentials): User | undefined => {
   return sensitiveInfoUserToUser(sensitiveInfoUser);
 };
 
-const getUserFromCookie = (cookie: string): User | undefined => {
-  try {
-    const user = JSON.parse(cookie);
-
-    return usersService.isUser(user) ? user : undefined;
-  } catch (e) {
-    console.error(e);
-    return undefined;
-  }
-};
-
-const addUser = (newUser: NewUser): User => {
+/**
+ * Saves user in database or updates the GitHub token if the user exits in 
+ * the database already.
+ */
+const pushUser = (newUser: NewUser): User => {
   const createdUser = usersRepository
     .getAll()
     .find((a) => a.email === newUser.email);
 
   if (createdUser) {
     const updatedUser: SensitiveInfoUser = { ...createdUser, ...newUser };
-    console.log({ addUser: updatedUser });
     usersRepository.update(updatedUser);
 
     return sensitiveInfoUserToUser(updatedUser);
@@ -63,6 +58,10 @@ const addUser = (newUser: NewUser): User => {
   return sensitiveInfoUserToUser(sensitiveInfoUser);
 };
 
+/**
+ * Returns the GitHub token for the given user if the user has one. 
+ * Returns undefined otherwise.
+ */
 const getGithubToken = (user: User): string | undefined => {
   const sensitiveInfoUser = usersRepository.getAll().find((a) => {
     return a.email === user.email;
@@ -73,6 +72,9 @@ const getGithubToken = (user: User): string | undefined => {
   return sensitiveInfoUser.githubToken;
 };
 
+/**
+ * Updates the user in the database setting the given new GitHub token.
+ */
 const setGithubToken = (
   user: User,
   githubToken: SensitiveInfoUser["githubToken"]
@@ -92,8 +94,7 @@ export default {
   sensitiveInfoUserToUser,
   findUserByEmail,
   findUserByCredentials,
-  getUserFromCookie,
-  addUser,
+  pushUser,
   setGithubToken,
   getGithubToken,
 };

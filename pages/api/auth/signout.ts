@@ -16,20 +16,21 @@ export default async (
     return;
   }
 
+  // Get the user from the cookie and verify the token.
   const token = req.cookies[USER_TOKEN_COOKIE];
   const user = await authApiService.getUserFromJWTToken(token);
 
   if (user) {
     const githubToken = usersApiService.getGithubToken(user);
     if (githubToken) {
-      // Remove Github access token from database
+      // Remove Github access token from database.
       usersApiService.setGithubToken(user, undefined);
-      // Revoke Github access token
+      // Revoke Github access token.
       await authApiService.revokeGitHubToken(githubToken);
     }
   }
 
-  // Expire the HTTP only cookie
+  // Expire the HTTP only cookie.
   const cookies = new Cookies(req, res);
   cookies.set(USER_TOKEN_COOKIE);
 

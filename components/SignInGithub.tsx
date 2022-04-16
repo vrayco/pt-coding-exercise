@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
+import { useRouter } from "next/router";
 import { signInGithub } from "redux/authSlice";
 import Github from "components/commons/icons/Github";
-import Spinner from "./commons/Spinner";
-import Button, { BaseColors } from "./commons/Button";
-import { useRouter } from "next/router";
+import Spinner from "components/commons/Spinner";
+import Button, { BaseColors } from "components/commons/Button";
 import { SigninProviders } from "enums";
 
 const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID_GITHUB;
@@ -16,9 +16,9 @@ type Props = {
 const SignInGithub = ({ code }: Props): JSX.Element => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { fetching, error } = useAppSelector((state) => state.auth); // TODO custom selectors instead of this?
-  const [clicked, setClicked] = useState<boolean>(false);
+  const { fetching, error } = useAppSelector((state) => state.auth);
   const user = useAppSelector((state) => state.auth.user);
+  const [clicked, setClicked] = useState<boolean>(false);
 
   useEffect(() => {
     if (code && !fetching && !user && !error) {
@@ -39,22 +39,20 @@ const SignInGithub = ({ code }: Props): JSX.Element => {
   };
 
   return (
-    <>
-      <Button
-        onClick={onHandleClick}
-        baseColor={BaseColors.BLACK}
-        disabled={disabled}
-      >
-        {showSpinner ? (
-          <Spinner />
-        ) : (
-          <>
-            <Github className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-            Sign in with GitHub
-          </>
-        )}
-      </Button>
-    </>
+    <Button
+      onClick={onHandleClick}
+      baseColor={BaseColors.BLACK}
+      disabled={disabled}
+    >
+      {showSpinner ? (
+        <Spinner />
+      ) : (
+        <>
+          <Github className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+          Sign in with GitHub
+        </>
+      )}
+    </Button>
   );
 };
 

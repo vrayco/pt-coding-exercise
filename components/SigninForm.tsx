@@ -4,17 +4,17 @@ import Button, { BaseColors } from "components/commons/Button";
 import { signInCredentials } from "redux/authSlice";
 import usersService from "services/usersService";
 import useDebounce from "hooks/useDebounce";
-import Input, { Types } from "./commons/Input";
-import Spinner from "./commons/Spinner";
+import Input, { Types } from "components/commons/Input";
+import Spinner from "components/commons/Spinner";
 import { SigninProviders } from "enums";
 
 const SignInForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { fetching, error } = useAppSelector((state) => state.auth); // TODO custom selectors instead of this?
+  const { fetching, error } = useAppSelector((state) => state.auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const debouncedEmail = useDebounce(email, 700);
   const [isValidEmail, setIsValidEmail] = useState<boolean | undefined>(true);
+  const debouncedEmail = useDebounce(email, 700);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -59,6 +59,7 @@ const SignInForm = (): JSX.Element => {
           autoFocus
           required
           autoComplete="off"
+          onBlur={() => setIsValidEmail(usersService.validateEmail(email))}
         />
 
         <Input

@@ -1,17 +1,17 @@
 import { NewUser, SensitiveInfoUser } from "types";
 const fs = require("fs");
 
-const DATABASE_PATH = "/tmp/users.json";
+const DATABASE_PATH = "/tmp/pt-coding-exercise-users.json";
 const DUMMY_USERS = [
   {
     id: 1,
-    email: "juan@playtomic.dev",
+    email: "juan@example.dev",
     name: "Juan Lebrón Chincoa",
     password: "pass",
   },
   {
     id: 2,
-    email: "alejandra@playtomic.dev",
+    email: "alejandra@example.dev",
     name: "Alejandra Salazar Bengoechea",
     password: "pass",
   },
@@ -22,7 +22,7 @@ const loadDataFromDisk = async () => {
   users = JSON.parse(data);
 };
 
-// users in JSON file for simplicity, store in a db for production applications
+// users in JSON file for simplicity, store in a db for production applications.
 let users: SensitiveInfoUser[] = [];
 try {
   if (fs.existsSync(DATABASE_PATH)) {
@@ -42,10 +42,13 @@ export const usersRepository = {
   getDummyUsers: (): SensitiveInfoUser[] => DUMMY_USERS,
 };
 
+/**
+ * Note: Same password for all new users so far. This is only valid as POC.
+ */
 function add(newUser: NewUser): SensitiveInfoUser {
   const user: SensitiveInfoUser = {
     id: users.length ? Math.max(...users.map((x) => x.id)) + 1 : 1,
-    password: "pass", // TODO add a comment
+    password: "pass",
     ...newUser,
   };
 

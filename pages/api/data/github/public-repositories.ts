@@ -13,6 +13,7 @@ export default async (
     return;
   }
 
+  // Get the user from the cookie and verify the token.
   const token = req.cookies[USER_TOKEN_COOKIE];
   const user = await authApiService.getUserFromJWTToken(token);
   if (!user) {

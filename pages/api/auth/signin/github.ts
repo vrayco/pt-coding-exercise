@@ -19,7 +19,7 @@ export default async (
   }
 
   try {
-    const code: string = authApiService.toCode(JSON.parse(req.body));
+    const { code } = authApiService.toCode(JSON.parse(req.body));
     const newUser = await authApiService.getUserFromGithub(code);
 
     if (!newUser || !newUser.email || !newUser.name) {
@@ -27,8 +27,8 @@ export default async (
       return;
     }
 
-    // Save user in database (if user exists, githubToken is updated only)
-    const user = usersApiService.addUser(newUser);
+    // Save/update user in database
+    const user = usersApiService.pushUser(newUser);
 
     // Create JWT token
     const token = await new SignJWT({ user })

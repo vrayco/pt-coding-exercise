@@ -36,29 +36,4 @@ describe("users service", () => {
       expect(user).toBeUndefined();
     });
   });
-
-  describe("getUserFromCookie method", () => {
-    it("retuns value when the JSON contains a User type", () => {
-      const value: User = {
-        id: 1,
-        email: "a",
-        name: "a",
-      };
-
-      const result = usersApiService.getUserFromCookie(JSON.stringify(value));
-
-      expect(result).toEqual(value);
-    });
-
-    it("returns undefined when the JSON does not contain NonSensitiveInfoUser type", () => {
-      const result = usersApiService.getUserFromCookie("{}");
-      expect(result).toBeUndefined();
-    });
-
-    it("logs an error when cookie param is no JSON", () => {
-      console.error = jest.fn();
-      usersApiService.getUserFromCookie("NO JSON");
-      expect(console.error).toHaveBeenCalled();
-    });
-  });
 });
