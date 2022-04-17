@@ -27,7 +27,7 @@ const Input = ({
   error,
   ...otherProps
 }: Props): JSX.Element => {
-  const handleOnChange = (e: React.FormEvent<HTMLInputElement>): void => {
+  const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     onHandleChange(e.currentTarget.value);
   };
 
@@ -42,7 +42,7 @@ const Input = ({
           className={`block w-full rounded-md focus:outline-none sm:text-sm ${
             error ? style.error : style.valid
           }`}
-          onChange={handleOnChange}
+          onChange={onChange}
           {...otherProps}
         />
         {showError ? (

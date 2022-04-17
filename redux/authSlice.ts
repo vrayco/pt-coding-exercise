@@ -50,7 +50,7 @@ export const authSlice = createSlice({
     builder.addMatcher(isHydrateAction, (state, action) => {
       state.user = action.payload.preloadedState?.auth?.user;
     });
-    builder.addMatcher(isResetAction, (state, action) => {
+    builder.addMatcher(isResetAction, () => {
       return initialState;
     });
   },
@@ -86,7 +86,7 @@ const signInGithub = createAsyncThunk<User, string, { rejectValue: string }>(
 const signOut = createAsyncThunk<Boolean>(
   "auth/signout",
   async (_, thunkAPI) => {
-    thunkAPI.dispatch(reset()); // This action will be handled by others reducers to get reset the whole state.
+    thunkAPI.dispatch(reset());
     return await authService.signOut();
   }
 );

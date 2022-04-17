@@ -49,7 +49,7 @@ export const dataSlice = createSlice({
       state.publicRepositories =
         action.payload.preloadedState?.data?.publicRepositories;
     });
-    builder.addMatcher(isResetAction, (state, action) => {
+    builder.addMatcher(isResetAction, () => {
       return initialState;
     });
   },

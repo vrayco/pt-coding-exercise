@@ -32,7 +32,7 @@ export default async (
     return;
   }
 
-  // Create JWT token
+  // Create JWT token.
   const token = await new SignJWT({ user })
     .setProtectedHeader({ alg: "HS256" })
     .setJti(nanoid())
@@ -40,7 +40,7 @@ export default async (
     .setExpirationTime("1h")
     .sign(new TextEncoder().encode(JWT_SECRET_KEY));
 
-  // Set JWT token in HTTP only cookie
+  // Set JWT token in HTTP only cookie.
   const cookies = new Cookies(req, res);
   cookies.set(USER_TOKEN_COOKIE, token, {
     httpOnly: true,

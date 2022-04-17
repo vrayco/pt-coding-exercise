@@ -1,18 +1,5 @@
-import { ApiResponse, Credentials, User } from "types";
-
-// TODO: Maybe move to a common place and give a better name
-const parseAndBuildResponse = async <T>(response: Response): Promise<T> => {
-  const { data, errors }: ApiResponse<T> = await response.json();
-
-  if (response.ok && data) {
-    return Promise.resolve(data);
-  } else {
-    const error = new Error(
-      errors?.map((e) => e.message).join("\n") ?? "unknown"
-    );
-    return Promise.reject(error);
-  }
-};
+import { Credentials, User } from "types";
+import { parseAndBuildResponse } from "services/apiService";
 
 const signInCredentials = async (credentials: Credentials): Promise<User> => {
   const response = await fetch("/api/auth/signin", {

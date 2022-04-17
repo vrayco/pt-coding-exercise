@@ -60,6 +60,7 @@ const getPublicGithubRepositories = async (): Promise<GitHubRepository[]> => {
     });
 
     const data = await response.json();
+    
     return mapFromGithubDataToGithubRepositories(data);
   } catch (e) {
     console.error(e);
