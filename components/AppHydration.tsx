@@ -3,10 +3,11 @@ import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { AppHydrationStatus } from "enums";
 import { RootState } from "redux/store";
 import { hydrate } from "redux/appSlice";
+import { HydrateAction } from "redux/utils";
 
 type Props = {
   children: JSX.Element;
-  preloadedState: Partial<RootState>;
+  preloadedState: HydrateAction["payload"]["preloadedState"];
 };
 
 const AppHydration = ({ preloadedState, children }: Props): JSX.Element => {

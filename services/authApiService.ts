@@ -216,10 +216,8 @@ const SSRVerifySessionAndHydrate = async (
         auth: {
           user,
         },
-        data: {
-          publicRepositories,
-          ownRepositories,
-        },
+        publicRepositories,
+        ownRepositories,
       },
     },
   };

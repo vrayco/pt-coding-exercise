@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "redux/authSlice";
-import dataSlice from "redux/dataSlice";
+import publicRepositoriesSlice from "redux/publicRespositoriesSlice";
+import ownRespositoriesSlice from "redux/ownRespositoriesSlice";
 import appSlice from "redux/appSlice";
 
 /**
- * IMPORTANT: The appSlice reducer must be declared in the last place of the 
+ * IMPORTANT: The appSlice reducer must be declared in the last place of the
  * reducers object to ensure their reducers are executed the last ones.
  * The reason is because redux executes those reducers in "extraReducers"
  * following the order here.
@@ -12,7 +13,8 @@ import appSlice from "redux/appSlice";
 export const store = configureStore({
   reducer: {
     auth: authSlice,
-    data: dataSlice,
+    publicRepositories: publicRepositoriesSlice,
+    ownRepositories: ownRespositoriesSlice,
     app: appSlice, // appSlice must be declared in the latest position.
   },
 });

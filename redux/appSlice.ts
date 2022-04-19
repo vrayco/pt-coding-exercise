@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppGlobalStatus, AppHydrationStatus } from "enums";
 import { RootState } from "./store";
-import { isHydrateAction, isResetAction } from "./utils";
+import { HydrateAction, isHydrateAction, isResetAction } from "./utils";
 
 interface AppState {
   globalStatus: AppGlobalStatus;
@@ -13,14 +13,14 @@ const initialState: AppState = {
   hydrated: AppHydrationStatus.PENDING,
 };
 
-type PayloadHydrateActionType = { preloadedState: Partial<RootState> };
+// type PayloadHydrateActionType = { preloadedState: Partial<RootState> };
 
 export const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
     // This action (hydrate) is handled by other reducers as well.
-    hydrate: (state, action: PayloadAction<PayloadHydrateActionType>) => {
+    hydrate: (state, action: PayloadAction<HydrateAction["payload"]>) => {
       state.hydrated = AppHydrationStatus.IN_PROGRESS;
     },
     // This action (reset) is handled by other reducers as well.

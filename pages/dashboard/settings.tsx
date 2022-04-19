@@ -6,7 +6,10 @@ import Layout from "components/Layout";
 import { USER_TOKEN_COOKIE } from "constants/auth";
 import authApiService from "services/authApiService";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
-import { fetchOwnRepositories } from "redux/dataSlice";
+import {
+  fetchRepositories,
+  repositoriesSelectors,
+} from "redux/ownRespositoriesSlice";
 import Alert, { AlertType } from "components/commons/Alert";
 import Spinner from "components/commons/Spinner";
 import RepositoryGrid from "components/RepositoryGrid";
@@ -21,10 +24,11 @@ const noSSR = !!(
 );
 
 const Settings: NextPage<Props> = () => {
-  const { fetching, error, ownRepositories } = useAppSelector(
-    (state) => state.data
-  );
   const user = useAppSelector((state) => state.auth.user);
+  const repositories = useAppSelector(repositoriesSelectors.selectAll);
+  const { fetching, error, hydrated } = useAppSelector(
+    (state) => state.ownRepositories
+  );
   const dispatch = useAppDispatch();
 
   // Fetch the repositories if the component is rendered by the browser (noSSR)
@@ -34,19 +38,19 @@ const Settings: NextPage<Props> = () => {
       noSSR &&
       user &&
       user.githubUsername &&
-      fetching !== true &&
-      error === undefined &&
-      ownRepositories === undefined
+      !hydrated &&
+      fetching === undefined &&
+      error === undefined
     ) {
-      dispatch(fetchOwnRepositories());
+      dispatch(fetchRepositories());
     }
-  }, [dispatch, error, fetching, ownRepositories, user]);
+  }, [dispatch, error, fetching, hydrated, repositories, user]);
 
   let showSignInGithubAlert = <></>;
   if (user === undefined || user.githubUsername === undefined) {
     showSignInGithubAlert = (
       <Alert variant={AlertType.INFO}>
-        <p>Sign in with your GitHub account is required for this section.</p>
+        <>Sign in with your GitHub account is required for this section.</>
       </Alert>
     );
   }
@@ -60,10 +64,10 @@ const Settings: NextPage<Props> = () => {
   );
 
   let showEmptyContentAlert = <></>;
-  if (fetching === false && ownRepositories && ownRepositories.length === 0) {
+  if (fetching !== true && repositories && repositories.length === 0) {
     showEmptyContentAlert = (
       <Alert variant={AlertType.INFO}>
-        <p>Ouch! There is not available data to show.</p>
+        <>Ouch! There is not available data to show.</>
       </Alert>
     );
   }
@@ -78,8 +82,8 @@ const Settings: NextPage<Props> = () => {
         {showErrorAlert}
         {fetching ? <Spinner /> : <></>}
         {showEmptyContentAlert}
-        {!fetching && ownRepositories && ownRepositories.length > 0 ? (
-          <RepositoryGrid data={ownRepositories} />
+        {!fetching && repositories && repositories.length > 0 ? (
+          <RepositoryGrid data={repositories} />
         ) : (
           <></>
         )}
