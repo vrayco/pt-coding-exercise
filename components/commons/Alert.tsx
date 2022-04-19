@@ -24,7 +24,7 @@ const Alert = ({
           />
         </div>
         <div className="ml-3 flex-1 md:flex md:justify-between">
-          <p className={`text-red}-700 text-sm`}>{children}</p>
+          <p className={"text-sm text-red-700"}>{children}</p>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@ const Alert = ({
       <div className="flex">
         <div className="flex-shrink-0">
           <InformationCircleIcon
-            className={`h-5 w-5 text-blue-400 `}
+            className={"h-5 w-5 text-blue-400"}
             aria-hidden="true"
           />
         </div>

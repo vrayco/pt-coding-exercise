@@ -1,9 +1,15 @@
 import { AnyAction, Action } from "@reduxjs/toolkit";
-import { RootState } from "./store";
+import { GitHubRepository, User } from "types";
 
-interface HydrateAction extends Action {
+export interface HydrateAction extends Action {
   payload: {
-    preloadedState: Partial<RootState>;
+    preloadedState: {
+      auth: {
+        user: User;
+      };
+      ownRepositories: GitHubRepository[];
+      publicRepositories: GitHubRepository[];
+    };
   };
 }
 
